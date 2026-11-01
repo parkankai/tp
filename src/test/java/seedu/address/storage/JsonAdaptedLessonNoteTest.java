@@ -44,6 +44,13 @@ public class JsonAdaptedLessonNoteTest {
     }
 
     @Test
+    public void toModelType_dateBeforeMinimum_throwsIllegalValueException() {
+        JsonAdaptedLessonNote lessonNote = new JsonAdaptedLessonNote("1999-12-31", VALID_SUBJECT, VALID_NOTE_TEXT);
+        String expectedMessage = LessonDate.MESSAGE_CONSTRAINTS;
+        assertThrows(IllegalValueException.class, expectedMessage, lessonNote::toModelType);
+    }
+
+    @Test
     public void toModelType_nullDate_throwsIllegalValueException() {
         JsonAdaptedLessonNote lessonNote = new JsonAdaptedLessonNote(null, VALID_SUBJECT, VALID_NOTE_TEXT);
         String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, LessonDate.class.getSimpleName());

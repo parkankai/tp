@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
@@ -14,8 +15,11 @@ import java.time.format.ResolverStyle;
  */
 public class LessonDate implements Comparable<LessonDate> {
 
+    public static final LocalDate MIN_DATE = LocalDate.of(2000, Month.JANUARY, 1);
+
     public static final String MESSAGE_CONSTRAINTS =
-            "Date must be in YYYY-MM-DD format and cannot be a future date.";
+            "Date must be in YYYY-MM-DD format, cannot be before " + MIN_DATE
+                    + ", and cannot be a future date.";
 
     /*
      * Exactly 4 digits, 2 digits and 2 digits, separated by hyphens.
@@ -42,7 +46,7 @@ public class LessonDate implements Comparable<LessonDate> {
 
     /**
      * Returns true if a given string is a real calendar date in YYYY-MM-DD format
-     * that is not later than today.
+     * that is not before {@link #MIN_DATE} or later than today.
      */
     public static boolean isValidLessonDate(String test) {
         if (!test.matches(VALIDATION_REGEX)) {
@@ -51,7 +55,7 @@ public class LessonDate implements Comparable<LessonDate> {
 
         try {
             LocalDate date = LocalDate.parse(test, FORMATTER);
-            return !date.isAfter(LocalDate.now());
+            return !date.isBefore(MIN_DATE) && !date.isAfter(LocalDate.now());
         } catch (DateTimeParseException e) {
             return false;
         }
