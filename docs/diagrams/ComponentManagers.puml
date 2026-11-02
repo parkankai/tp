@@ -21,6 +21,8 @@ Class StorageManager
 
 Class HiddenOutside #FFFFFF
 HiddenOutside ..> Logic
+HiddenOutside ..> Model
+HiddenOutside ..> Storage
 
 LogicManager .up.|> Logic
 ModelManager .up.|> Model
@@ -28,4 +30,5 @@ StorageManager .up.|> Storage
 
 LogicManager --> Model
 LogicManager --> Storage
+StorageManager --> Model
 @enduml

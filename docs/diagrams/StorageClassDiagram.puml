@@ -32,5 +32,16 @@ StorageManager -down-> "1" JsonAddressBookStorage
 JsonAddressBookStorage ..> JsonSerializableAddressBook
 JsonSerializableAddressBook --> "*" JsonAdaptedStudent
 JsonAdaptedStudent --> "*" JsonAdaptedLessonNote
+JsonAdaptedStudent ..> Student
+JsonAdaptedLessonNote ..> LessonNote
+JsonSerializableAddressBook ..> AddressBook
+JsonUserPrefsStorage ..> UserPrefs
+
+package Model <<Rectangle>> {
+Class Student
+Class LessonNote
+Class AddressBook
+Class UserPrefs
+}
 
 @enduml
