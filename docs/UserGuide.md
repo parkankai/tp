@@ -82,6 +82,7 @@ Format: `addstudent n/NAME lvl/LEVEL s/SUBJECT... pn/PARENT_PHONE pe/PARENT_EMAI
 
 * `NAME`, `LEVEL`, at least one `SUBJECT`, `PARENT_PHONE`, and `PARENT_EMAIL` are compulsory.
 * `NAME` may contain Unicode letters, accent marks, digits, spaces, apostrophes, `-`, and `/`, must contain at least one letter or digit, and must be at most 60 characters long. Punctuation-only names such as `---` and `/` are rejected.
+* A word in `NAME` cannot start with a lowercase prefix such as `s/` or `n/`, because it is read as a new field.
 * `LEVEL` must be one of `Pri 1` to `Pri 6`, `Sec 1` to `Sec 5`, or `JC 1` to `JC 2`.
 * `SUBJECT` must contain only letters and spaces and must be 2 to 30 characters long.
 * Duplicate subjects are merged case-insensitively. If a duplicate is entered, the application displays a warning naming the ignored subject.
