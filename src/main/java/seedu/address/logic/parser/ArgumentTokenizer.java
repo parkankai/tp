@@ -1,7 +1,5 @@
 package seedu.address.logic.parser;
 
-import static seedu.address.logic.parser.CliSyntax.PREFIX_SUBJECT;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,9 +14,6 @@ import java.util.stream.Collectors;
  *    in the above example.<br>
  */
 public class ArgumentTokenizer {
-
-    /** Text that begins with the subject prefix but belongs to a name, as in "Ravi s/o Kumar". */
-    private static final String SON_OF = "s/o";
 
     /**
      * Tokenizes an arguments string and returns an {@code ArgumentMultimap} object that maps prefixes to their
@@ -73,27 +68,12 @@ public class ArgumentTokenizer {
 
         int prefixPosition = findPrefixPosition(argsString, prefix.getPrefix(), 0);
         while (prefixPosition != -1) {
-            if (!isSonOf(argsString, prefix, prefixPosition)) {
-                PrefixPosition extendedPrefix = new PrefixPosition(prefix, prefixPosition);
-                positions.add(extendedPrefix);
-            }
+            PrefixPosition extendedPrefix = new PrefixPosition(prefix, prefixPosition);
+            positions.add(extendedPrefix);
             prefixPosition = findPrefixPosition(argsString, prefix.getPrefix(), prefixPosition);
         }
 
         return positions;
-    }
-
-    /**
-     * Returns true if the {@code prefix} found at {@code position} is the subject prefix starting a
-     * lowercase "s/o" that is followed by whitespace or the end of {@code argsString}. Such text is
-     * part of a name like "Ravi s/o Kumar", not the start of a subject.
-     */
-    private static boolean isSonOf(String argsString, Prefix prefix, int position) {
-        if (!prefix.equals(PREFIX_SUBJECT) || !argsString.startsWith(SON_OF, position)) {
-            return false;
-        }
-        int endPosition = position + SON_OF.length();
-        return endPosition == argsString.length() || Character.isWhitespace(argsString.charAt(endPosition));
     }
 
     /**
