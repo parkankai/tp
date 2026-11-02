@@ -79,15 +79,15 @@ public class AddCommandParserTest {
 
     @Test
     public void duplicateSubjects_repeatedSpaces_success() {
-        Student expectedStudent = new PersonBuilder().withSubjects("Computer Science").build();
-        String userInput = NAME_DESC_BOB + LEVEL_DESC_BOB + " s/Computer Science s/Computer  Science"
+        Student expectedStudent = new PersonBuilder().withSubjects("Computer  Science").build();
+        String userInput = NAME_DESC_BOB + LEVEL_DESC_BOB + " s/Computer  Science s/Computer Science"
                 + PARENT_PHONE_DESC_BOB + PARENT_EMAIL_DESC_BOB;
 
         assertParseSuccess(parser, userInput, new AddCommand(
                 new PersonBuilder(expectedStudent).withName("Bob Choo")
                         .withAcademicLevel("Pri 5").withPhone("92222222")
                         .withEmail("bob@example.com").build(),
-                Messages.getWarningMessageForDuplicateSubjects(List.of("Computer  Science"))));
+                Messages.getWarningMessageForDuplicateSubjects(List.of("Computer Science"))));
     }
 
     @Test

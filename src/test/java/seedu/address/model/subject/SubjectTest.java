@@ -48,12 +48,11 @@ public class SubjectTest {
     }
 
     @Test
-    public void constructor_repeatedSpaces_normalizesSubjectName() {
+    public void matches_repeatedSpaces_returnsTrue() {
         Subject repeatedSpaces = new Subject("Computer  Science");
 
-        assertEquals("Computer Science", repeatedSpaces.subjectName);
-        assertEquals(repeatedSpaces, new Subject("Computer Science"));
-        assertTrue(Subject.isValidSubjectName("Computer  Science"));
+        assertEquals("Computer  Science", repeatedSpaces.subjectName);
+        assertTrue(repeatedSpaces.matches(new Subject("Computer Science")));
     }
 
     @Test

@@ -104,18 +104,21 @@ public class ParserUtil {
         }
     }
 
-    /** Parses subject values into a set, merging duplicate subjects case-insensitively. */
+    /** Parses subject values into a set, merging duplicate subjects case-insensitively and space-insensitively. */
     public static Set<Subject> parseSubjects(Collection<String> subjects) throws ParseException {
         requireNonNull(subjects);
         final Set<Subject> subjectSet = new HashSet<>();
         for (String subject : subjects) {
-            subjectSet.add(parseSubject(subject));
+            Subject parsedSubject = parseSubject(subject);
+            if (subjectSet.stream().noneMatch(existingSubject -> existingSubject.matches(parsedSubject))) {
+                subjectSet.add(parsedSubject);
+            }
         }
         return subjectSet;
     }
 
     /**
-     * Returns subject values that duplicate an earlier value, ignoring case.
+     * Returns subject values that duplicate an earlier value, ignoring case and repeated spaces.
      */
     public static List<String> findDuplicateSubjects(Collection<String> subjects) throws ParseException {
         requireNonNull(subjects);
@@ -123,8 +126,10 @@ public class ParserUtil {
         final List<String> duplicateSubjects = new ArrayList<>();
         for (String subject : subjects) {
             Subject parsedSubject = parseSubject(subject);
-            if (!uniqueSubjects.add(parsedSubject)) {
+            if (uniqueSubjects.stream().anyMatch(existingSubject -> existingSubject.matches(parsedSubject))) {
                 duplicateSubjects.add(subject);
+            } else {
+                uniqueSubjects.add(parsedSubject);
             }
         }
         return duplicateSubjects;
