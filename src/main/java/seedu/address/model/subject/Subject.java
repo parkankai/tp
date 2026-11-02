@@ -31,15 +31,21 @@ public class Subject {
      */
     public Subject(String subjectName) {
         requireNonNull(subjectName);
-        checkArgument(isValidSubjectName(subjectName), MESSAGE_CONSTRAINTS);
-        this.subjectName = subjectName;
+        String normalizedSubjectName = normalizeSubjectName(subjectName);
+        checkArgument(isValidSubjectName(normalizedSubjectName), MESSAGE_CONSTRAINTS);
+        this.subjectName = normalizedSubjectName;
     }
 
     /**
      * Returns true if a given string is a valid subject name.
      */
     public static boolean isValidSubjectName(String test) {
-        return test.matches(VALIDATION_REGEX);
+        return normalizeSubjectName(test).matches(VALIDATION_REGEX);
+    }
+
+    /** Returns the subject name with consecutive spaces replaced by a single space. */
+    private static String normalizeSubjectName(String subjectName) {
+        return subjectName.replaceAll(" +", " ");
     }
 
     @Override

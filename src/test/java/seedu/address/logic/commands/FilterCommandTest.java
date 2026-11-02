@@ -86,7 +86,7 @@ public class FilterCommandTest {
         assertEquals(List.of(matchingStudent), testModel.getFilteredStudentList());
         assertEquals(List.of(matchingStudent, otherStudent), testModel.getAddressBook().getStudentList());
         assertTrue(matchingStudent.getSubjects().stream()
-                .anyMatch(subject -> subject.subjectName.equals("Additional  Mathematics")));
+                .anyMatch(subject -> subject.subjectName.equals("Additional Mathematics")));
     }
 
     @Test
