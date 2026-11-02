@@ -42,6 +42,9 @@
 * @sealfromdowntown used ChatGPT EDU to develop regression tests for note
   reordering and identity-based index lookup, and to diagnose CI and Checkstyle failures.
 
+* @skhaw2004 used Claude Code to add test coverage for `LessonNote` and its relevant classes.
+* @skhaw2004 used Claude Code to review PRs and to check UserGuide and DeveloperGuide against the
+  actual implementation.
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Setting up, getting started**
