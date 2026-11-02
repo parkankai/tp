@@ -109,6 +109,10 @@ public class AddNoteCommandParserTest {
         // in the future
         assertParseFailure(parser, INDEX_FIRST_PERSON.getOneBased() + " " + PREFIX_DATE + "2099-01-01"
                 + SUBJECT_DESC + NOTE_DESC, LessonDate.MESSAGE_CONSTRAINTS);
+
+        // before the minimum permitted date
+        assertParseFailure(parser, INDEX_FIRST_PERSON.getOneBased() + " " + PREFIX_DATE + "1999-12-31"
+                + SUBJECT_DESC + NOTE_DESC, LessonDate.MESSAGE_CONSTRAINTS);
     }
 
     @Test

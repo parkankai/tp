@@ -107,6 +107,10 @@ public class EditNoteCommandParserTest {
         String input = INDEX_FIRST_PERSON.getOneBased() + LESSON_INDEX_DESC
                 + " " + PREFIX_DATE + "2026-02-30";
         assertParseFailure(parser, input, LessonDate.MESSAGE_CONSTRAINTS);
+
+        input = INDEX_FIRST_PERSON.getOneBased() + LESSON_INDEX_DESC
+                + " " + PREFIX_DATE + "1999-12-31";
+        assertParseFailure(parser, input, LessonDate.MESSAGE_CONSTRAINTS);
     }
 
     @Test

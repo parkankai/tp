@@ -46,7 +46,13 @@ public class LessonDateTest {
         // future date
         assertFalse(LessonDate.isValidLessonDate(LocalDate.now().plusDays(1).toString())); // tomorrow
 
+        // before the minimum permitted date
+        assertFalse(LessonDate.isValidLessonDate("0000-01-01")); // year 0000
+        assertFalse(LessonDate.isValidLessonDate("0001-01-01")); // year 0001
+        assertFalse(LessonDate.isValidLessonDate("1999-12-31")); // day before minimum
+
         // valid lesson date
+        assertTrue(LessonDate.isValidLessonDate("2000-01-01")); // minimum
         assertTrue(LessonDate.isValidLessonDate("2020-01-01")); // past date
         assertTrue(LessonDate.isValidLessonDate("2024-02-29")); // 29 February in a leap year
         assertTrue(LessonDate.isValidLessonDate(LocalDate.now().minusDays(1).toString())); // yesterday

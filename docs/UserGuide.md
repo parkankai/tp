@@ -179,7 +179,7 @@ Format: `addnote INDEX d/DATE s/SUBJECT note/NOTE_TEXT`
 * All three of `d/`, `s/` and `note/` are compulsory.
 * `note/` must be the final parameter. Everything after `note/`, including text such as `d/`, `s/`, `ln/`, or
   another `note/`, is saved as part of `NOTE_TEXT`.
-* `DATE` must be a real calendar date in `YYYY-MM-DD` format and cannot be a future date.
+* `DATE` must be a real calendar date in `YYYY-MM-DD` format, must not be before `2000-01-01`, and cannot be a future date.
 * `SUBJECT` must contain only letters and spaces and must be 2 to 30 characters long.
 * `SUBJECT` must match one of the student's current subjects, ignoring letter case. The note stores the subject using the spelling shown in the student's profile.
 * `NOTE_TEXT` cannot be blank, must not exceed 500 characters, and must be on a single line.
