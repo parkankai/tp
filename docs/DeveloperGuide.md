@@ -37,6 +37,9 @@
 * @zxtay3 used ChatGPT EDU to prepare manual test commands for accented names, subject filtering,
   emoji previews, and command-result readability.
 
+* @skhaw2004 used Claude Code to add test coverage for `LessonNote` and its relevant classes.
+* @skhaw2004 used Claude Code to review PRs and to check UserGuide and DeveloperGuide against the
+  actual implementation.
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Setting up, getting started**
