@@ -45,17 +45,9 @@ public class StudentMatchesFilterPredicate implements Predicate<Student> {
 
         boolean matchesSubjects = requiredSubjects.stream()
                 .allMatch(requiredSubject -> student.getSubjects().stream()
-                        .anyMatch(studentSubject -> normalizeSubjectName(studentSubject)
-                                .equalsIgnoreCase(normalizeSubjectName(requiredSubject))));
+                        .anyMatch(studentSubject -> studentSubject.matches(requiredSubject)));
 
         return matchesLevel && matchesSubjects;
-    }
-
-    /**
-     * Returns the subject name with consecutive spaces replaced by a single space.
-     */
-    private static String normalizeSubjectName(Subject subject) {
-        return subject.subjectName.replaceAll(" +", " ");
     }
 
     @Override

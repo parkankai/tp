@@ -57,6 +57,16 @@ public class StudentTest {
     }
 
     @Test
+    public void findSubject_repeatedSpaces_returnsProfileSubject() {
+        Student student = new PersonBuilder().withSubjects("Additional  Mathematics").build();
+
+        assertEquals("Additional  Mathematics",
+                student.findSubject(new Subject("Additional Mathematics")).get().subjectName);
+        assertEquals("Additional  Mathematics",
+                student.findSubject(new Subject("additional   mathematics")).get().subjectName);
+    }
+
+    @Test
     public void findSubject_subjectNotTaken_returnsEmpty() {
         Student student = new PersonBuilder().withSubjects("Math").build();
         assertTrue(student.findSubject(new Subject("Geography")).isEmpty());
