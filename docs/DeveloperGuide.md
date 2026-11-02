@@ -22,7 +22,12 @@
   [Jackson](https://github.com/FasterXML/jackson) for JSON serialization, and
   [JUnit 5](https://junit.org/junit5/) for automated testing.
 
-### Notable uses of AI:
+### Notable uses of AI
+
+* @Tristan914684 used ChatGPT EDU to test release v1.5 for bugs.
+* @Tristan914684 used ChatGPT EDU to add more test coverage to the `addstudent` feature.
+* @Tristan914684 used ChatGPT EDU to create the `Student` and `UniqueStudentList` classes.
+* @Tristan914684 used ChatGPT EDU to validate that the UserGuide is up to date.
 
 * @parkankai used ChatGPT EDU to test releases v1.4 and v1.5 for bugs.
 * @parkankai used ChatGPT EDU to add more test coverage to Features: `View` and `Filter`.
