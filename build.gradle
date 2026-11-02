@@ -76,7 +76,7 @@ dependencies {
 }
 
 shadowJar {
-    archiveFileName = 'addressbook.jar'
+    archiveFileName = '[CS2103T-F11-4][TutorBroPro].jar'
 }
 
 defaultTasks 'clean', 'test'
