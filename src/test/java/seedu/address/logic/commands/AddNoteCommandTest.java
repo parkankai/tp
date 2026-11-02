@@ -120,6 +120,29 @@ public class AddNoteCommandTest {
     }
 
     @Test
+    public void execute_subjectWithDifferentSpacing_storesProfileSpelling() {
+        Student originalStudent = model.getFilteredStudentList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Student firstStudent = new PersonBuilder(originalStudent)
+                .withSubjects("Additional  Mathematics").build();
+        model.setStudent(originalStudent, firstStudent);
+        LessonNote noteWithDifferentSpacing = new LessonNote(new LessonDate("2026-10-01"),
+                new Subject("Additional Mathematics"), new NoteText("Revised algebra"));
+        Student editedStudent = new PersonBuilder(firstStudent).withLessonNotes(new LessonNote(
+                noteWithDifferentSpacing.getDate(), new Subject("Additional  Mathematics"),
+                noteWithDifferentSpacing.getNoteText())).build();
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setStudent(firstStudent, editedStudent);
+
+        AddNoteCommand command = new AddNoteCommand(INDEX_FIRST_PERSON, noteWithDifferentSpacing);
+
+        assertCommandSuccess(command, model, String.format(AddNoteCommand.MESSAGE_ADD_NOTE_SUCCESS,
+                firstStudent.getName(), noteWithDifferentSpacing.getDate(), "Additional  Mathematics",
+                noteWithDifferentSpacing.getNoteText()), expectedModel);
+        assertEquals("Additional  Mathematics", model.getFilteredStudentList()
+                .get(INDEX_FIRST_PERSON.getZeroBased()).getLessonNotes().get(0).getSubject().subjectName);
+    }
+
+    @Test
     public void execute_filteredList_success() {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 

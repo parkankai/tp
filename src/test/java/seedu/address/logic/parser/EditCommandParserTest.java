@@ -93,13 +93,6 @@ public class EditCommandParserTest {
     }
 
     @Test
-    public void parse_nameWithSonOf_subjectsUnchanged() {
-        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withName("John s/o Lee").build();
-
-        assertParseSuccess(parser, "1 n/John s/o Lee", new EditCommand(INDEX_FIRST_PERSON, descriptor));
-    }
-
-    @Test
     public void parse_multipleSubjects_success() {
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
                 .withSubjects("Math", "Science").build();

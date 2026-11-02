@@ -87,12 +87,13 @@ public class Student {
     }
 
     /**
-     * Returns the subject in this student's profile that matches {@code subject}, ignoring case,
+     * Returns the subject in this student's profile that matches {@code subject}, ignoring case
+     * and repeated spaces,
      * or an empty {@code Optional} if the student does not take it.
      */
     public Optional<Subject> findSubject(Subject subject) {
         requireNonNull(subject);
-        return subjects.stream().filter(subject::equals).findFirst();
+        return subjects.stream().filter(profileSubject -> profileSubject.matches(subject)).findFirst();
     }
 
     /** Returns true if both students have the same name and same parent phone number */

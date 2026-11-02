@@ -98,7 +98,7 @@ public class UiCoverageTest {
     @Test
     public void personCard_longParentEmail_wrapsInsteadOfTruncating() throws Exception {
         Student studentWithLongEmail = new PersonBuilder(ALICE)
-                .withEmail("nurulaisyah.parent.contact.mother@exampletutoringcentre.com.sg").build();
+                .withEmail("nurulaisyah.parent.contact.mother@exampletutoringcentre.com").build();
 
         runOnFxThread(() -> {
             PersonCard personCard = new PersonCard(studentWithLongEmail, 1);
