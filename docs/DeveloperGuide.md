@@ -468,6 +468,12 @@ The following rules apply to these use cases:
 
   Use case resumes from step 1.
 
+* 1d. TutorBroPro detects that the student already has a lesson note with the same date, subject and note text.
+
+  * 1d1. TutorBroPro informs the tutor that the lesson note already exists.
+
+  Use case resumes from step 1.
+
 **Use case: UC04 - View a student's lesson history**
 
 **Preconditions:** A student list is displayed.
