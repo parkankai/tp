@@ -44,7 +44,7 @@ TutorBroPro is a **desktop application for freelance private tutors to manage st
 
    * `addnote 1 d/2026-10-01 s/Math note/Revised simultaneous equations.` : Adds a lesson note.
 
-   * `history 1` : Shows the lesson history of the 1st student shown in the current list.
+   * `history 1` : Shows the history for lesson notes of the 1st student shown in the current list.
 
    * `deletestudent 3` : Deletes the 3rd student shown in the current list.
 
