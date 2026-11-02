@@ -9,7 +9,9 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Email {
 
-    public static final String MESSAGE_CONSTRAINTS = "Emails should be of the format example@domain";
+    public static final String MESSAGE_CONSTRAINTS =
+            "Emails should be of the format example@domain and at most 60 characters long.";
+    public static final int MAX_LENGTH = 60;
 
     // Keep '-' last so it is treated literally inside the regex character class.
     private static final String SPECIAL_CHARACTERS = "+_.'-";
@@ -46,7 +48,7 @@ public class Email {
      * Returns true if a given string is a valid email.
      */
     public static boolean isValidEmail(String test) {
-        return test.matches(VALIDATION_REGEX);
+        return test.length() <= MAX_LENGTH && test.matches(VALIDATION_REGEX);
     }
 
     @Override

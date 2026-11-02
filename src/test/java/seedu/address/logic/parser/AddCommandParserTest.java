@@ -128,6 +128,16 @@ public class AddCommandParserTest {
     }
 
     @Test
+    public void parse_parentEmailExceedsMaximumLength_failure() {
+        String validInput = NAME_DESC_BOB + LEVEL_DESC_BOB + SUBJECT_DESC_MATH
+                + PARENT_PHONE_DESC_BOB + PARENT_EMAIL_DESC_BOB;
+        String longEmail = "a".repeat(49) + "@example.com";
+
+        assertParseFailure(parser, validInput.replace("bob@example.com", longEmail),
+                Email.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
     public void parse_invalidLevel_reportsLevelConstraint() {
         String userInput = " n/Jack lvl/Pri 1 2 s/Physics pn/91234567 pe/test@gmail";
 
