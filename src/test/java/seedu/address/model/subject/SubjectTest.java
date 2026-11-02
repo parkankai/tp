@@ -48,6 +48,14 @@ public class SubjectTest {
     }
 
     @Test
+    public void matches_repeatedSpaces_returnsTrue() {
+        Subject repeatedSpaces = new Subject("Computer  Science");
+
+        assertEquals("Computer  Science", repeatedSpaces.subjectName);
+        assertTrue(repeatedSpaces.matches(new Subject("Computer Science")));
+    }
+
+    @Test
     public void equals() {
         Subject subject = new Subject("Math");
 

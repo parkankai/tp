@@ -85,7 +85,7 @@ Format: `addstudent n/NAME lvl/LEVEL s/SUBJECT... pn/PARENT_PHONE pe/PARENT_EMAI
 * A word in `NAME` cannot start with a lowercase prefix such as `s/` or `n/`, because it is read as a new field.
 * `LEVEL` must be one of `Pri 1` to `Pri 6`, `Sec 1` to `Sec 5`, or `JC 1` to `JC 2`.
 * `SUBJECT` must contain only letters and spaces and must be 2 to 30 characters long.
-* Duplicate subjects are merged case-insensitively. If a duplicate is entered, the application displays a warning naming the ignored subject.
+* Duplicate subjects are merged case-insensitively and consecutive spaces are treated as a single space. If a duplicate is entered, the application displays a warning naming the ignored subject.
 * Duplicate students are not allowed. A student is considered a duplicate only when both the name and parent phone number match an existing student.
 * `PARENT_PHONE` must contain exactly 8 digits and start with `8` or `9`.
 * `PARENT_EMAIL` must be a valid email address in the form `example@domain` and must be at most 60 characters long.
@@ -107,7 +107,7 @@ Format: `edit INDEX [n/NAME] [lvl/LEVEL] [s/SUBJECT]... [pn/PARENT_PHONE] [pe/PA
 * An edit cannot create another student with the same name and parent phone number.
 * After a successful edit, the full student list is displayed.
 * When editing subjects, all of the student's existing subjects are replaced; adding subjects is not cumulative. To replace them, list every subject you want the student to keep.
-* Duplicate subjects are merged case-insensitively, and the application warns when a duplicate subject is ignored.
+* Duplicate subjects are merged case-insensitively and consecutive spaces are treated as a single space. The application warns when a duplicate subject is ignored.
 * The edited student must retain at least one subject. Empty subject entries such as `edit 1 s/` are rejected.
 * Each supplied field follows the same validation rules as `addstudent`.
 * Editing a student's profile does not change or delete existing lesson notes. Removing a subject from the profile does not remove historical notes recorded for that subject.
