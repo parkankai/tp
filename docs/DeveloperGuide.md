@@ -33,6 +33,10 @@
 * @parkankai used ChatGPT EDU to add more test coverage to Features: `View` and `Filter`.
 * @parkankai used ChatGPT EDU to validate UserGuide and DeveloperGuide is up to date.
 
+* @zxtay3 used ChatGPT EDU to check the documents against the implementation and proposed changes.
+* @zxtay3 used ChatGPT EDU to prepare manual test commands for accented names, subject filtering,
+  emoji previews, and command-result readability.
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Setting up, getting started**
