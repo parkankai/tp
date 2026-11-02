@@ -7,6 +7,7 @@ import static seedu.address.logic.Messages.MESSAGE_PERSONS_LISTED_OVERVIEW;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -16,8 +17,10 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.AcademicLevel;
+import seedu.address.model.person.Student;
 import seedu.address.model.person.StudentMatchesFilterPredicate;
 import seedu.address.model.subject.Subject;
+import seedu.address.testutil.PersonBuilder;
 
 public class FilterCommandTest {
 
@@ -64,6 +67,26 @@ public class FilterCommandTest {
                 expectedModel);
 
         assertTrue(model.getFilteredStudentList().isEmpty());
+    }
+
+    @Test
+    public void execute_repeatedSubjectSpaces_displaysMatchingStudents() {
+        Model testModel = new ModelManager();
+        Student matchingStudent = new PersonBuilder().withName("Alice Tan")
+                .withSubjects("Additional  Mathematics", "Science").build();
+        Student otherStudent = new PersonBuilder().withName("Ben Tan").withSubjects("Science").build();
+        testModel.addStudent(matchingStudent);
+        testModel.addStudent(otherStudent);
+        StudentMatchesFilterPredicate predicate = new StudentMatchesFilterPredicate(
+                Optional.empty(), Set.of(new Subject("additional mathematics")));
+
+        CommandResult result = new FilterCommand(predicate).execute(testModel);
+
+        assertEquals(String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1), result.getFeedbackToUser());
+        assertEquals(List.of(matchingStudent), testModel.getFilteredStudentList());
+        assertEquals(List.of(matchingStudent, otherStudent), testModel.getAddressBook().getStudentList());
+        assertTrue(matchingStudent.getSubjects().stream()
+                .anyMatch(subject -> subject.subjectName.equals("Additional  Mathematics")));
     }
 
     @Test

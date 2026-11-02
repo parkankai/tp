@@ -54,7 +54,7 @@ public class EditNoteCommandParserTest {
     @Test
     public void parse_partialFields_success() throws Exception {
         String input = INDEX_FIRST_PERSON.getOneBased()
-                + NOTE_DESC + LESSON_INDEX_DESC;
+                + LESSON_INDEX_DESC + NOTE_DESC;
 
         EditNoteCommand expected = new EditNoteCommand(
                 INDEX_FIRST_PERSON, INDEX_SECOND_PERSON,
@@ -62,6 +62,35 @@ public class EditNoteCommandParserTest {
                 Optional.of(new NoteText(VALID_NOTE)));
 
         assertParseSuccess(parser, input, expected);
+    }
+
+    @Test
+    public void parse_partialFieldsWithoutNote_success() {
+        String input = INDEX_FIRST_PERSON.getOneBased() + LESSON_INDEX_DESC + DATE_DESC + SUBJECT_DESC;
+        EditNoteCommand expected = new EditNoteCommand(
+                INDEX_FIRST_PERSON, INDEX_SECOND_PERSON,
+                Optional.of(new LessonDate(VALID_DATE)), Optional.of(new Subject(VALID_SUBJECT)), Optional.empty());
+
+        assertParseSuccess(parser, input, expected);
+    }
+
+    @Test
+    public void parse_noteContainsCommandPrefixes_success() {
+        String noteWithPrefixes = "Practised ln/ notation s/ Math d/ daily note/ carefully";
+        String input = INDEX_FIRST_PERSON.getOneBased() + LESSON_INDEX_DESC
+                + " " + PREFIX_NOTE + noteWithPrefixes;
+        EditNoteCommand expected = new EditNoteCommand(
+                INDEX_FIRST_PERSON, INDEX_SECOND_PERSON,
+                Optional.empty(), Optional.empty(), Optional.of(new NoteText(noteWithPrefixes)));
+
+        assertParseSuccess(parser, input, expected);
+    }
+
+    @Test
+    public void parse_lessonIndexAfterNote_failure() {
+        String input = INDEX_FIRST_PERSON.getOneBased() + NOTE_DESC + LESSON_INDEX_DESC;
+
+        assertParseFailure(parser, input, MESSAGE_INVALID_FORMAT);
     }
 
     @Test

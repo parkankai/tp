@@ -12,7 +12,8 @@ import java.util.Locale;
 public class Subject {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Subject names should only contain letters and spaces, and cannot be blank.";
+            "Subject names should be 2 to 30 characters long, contain only letters and spaces, "
+                    + "and start and end with a letter.";
 
     /*
      * 2 to 30 characters, letters and spaces only.

@@ -43,11 +43,20 @@ public class EditNoteCommand extends Command {
 
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
 
+    public static final String MESSAGE_NO_CHANGES =
+            "No changes were made. Provide at least one different lesson note detail.";
+
     public static final String MESSAGE_INVALID_LESSON_NOTE_INDEX =
             "The lesson note index provided is invalid.";
 
+    public static final String MESSAGE_DUPLICATE_NOTE = AddNoteCommand.MESSAGE_DUPLICATE_NOTE;
+
     public static final String MESSAGE_EDIT_NOTE_SUCCESS =
             "Edited lesson note %1$s for %2$s.";
+
+    /** Success message containing the original index, student name and updated index. */
+    public static final String MESSAGE_EDIT_NOTE_MOVED_SUCCESS =
+            "Edited lesson note %1$s for %2$s. It is now lesson note %3$s.";
 
     private final Index studentIndex;
     private final Index lessonIndex;
@@ -91,10 +100,26 @@ public class EditNoteCommand extends Command {
         }
 
         LessonNote oldNote = lessonNotes.get(lessonIndex.getZeroBased());
+        // Only a new subject is checked, so a note keeps its subject even after the student stops taking it
+        Subject editedSubject = oldNote.getSubject();
+        if (subject.isPresent()) {
+            editedSubject = studentToEdit.findSubject(subject.get())
+                    .orElseThrow(() -> new CommandException(String.format(Messages.MESSAGE_SUBJECT_NOT_TAKEN,
+                            studentToEdit.getName(), subject.get())));
+        }
         LessonNote editedNote = new LessonNote(
                 date.orElse(oldNote.getDate()),
-                subject.orElse(oldNote.getSubject()),
+                editedSubject,
                 noteText.orElse(oldNote.getNoteText()));
+
+        for (int i = 0; i < lessonNotes.size(); i++) {
+            if (i != lessonIndex.getZeroBased() && editedNote.equals(lessonNotes.get(i))) {
+                throw new CommandException(MESSAGE_DUPLICATE_NOTE);
+            }
+        }
+        if (editedNote.equals(oldNote)) {
+            throw new CommandException(MESSAGE_NO_CHANGES);
+        }
 
         List<LessonNote> updatedLessonNotes = new ArrayList<>(lessonNotes);
         updatedLessonNotes.set(lessonIndex.getZeroBased(), editedNote);
@@ -104,10 +129,42 @@ public class EditNoteCommand extends Command {
                 studentToEdit.getSubjects(), studentToEdit.getParentPhone(), studentToEdit.getParentEmail(),
                 updatedLessonNotes);
 
+        /*
+         * Rebuilding the student sorts lesson notes by date, so the edited note
+         * may no longer occupy the index supplied in the command.
+         * Sorting preserves the note objects, allowing identity comparison to
+         * locate this specific note even when another note has equal details.
+         * Convert its zero-based list position to the one-based history index.
+         */
+        int newIndex = findNoteIndex(editedStudent.getLessonNotes(), editedNote);
+
         model.setStudent(studentToEdit, editedStudent);
+
+        // Report both positions only when the edited note moves in the displayed history.
+        if (newIndex != lessonIndex.getOneBased()) {
+            return new CommandResult(String.format(MESSAGE_EDIT_NOTE_MOVED_SUCCESS,
+                    lessonIndex.getOneBased(), studentToEdit.getName(), newIndex));
+        }
 
         return new CommandResult(String.format(MESSAGE_EDIT_NOTE_SUCCESS,
                 lessonIndex.getOneBased(), studentToEdit.getName()));
+    }
+
+    /**
+     * Returns the one-based position of the exact edited note in the sorted history.
+     * The history must contain the same note instance, not merely an equal note.
+     */
+    static int findNoteIndex(List<LessonNote> sortedNotes, LessonNote editedNote) {
+        int newIndex = -1;
+        for (int i = 0; i < sortedNotes.size(); i++) {
+            // Locate the exact edited object, not another note with equal details.
+            if (sortedNotes.get(i) == editedNote) {
+                newIndex = i + 1;
+            }
+        }
+        assert newIndex > 0 : "Edited note must exist in the updated student's history";
+
+        return newIndex;
     }
 
     @Override

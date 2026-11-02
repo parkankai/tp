@@ -24,8 +24,8 @@ public class EditNoteCommandParser implements Parser<EditNoteCommand> {
     @Override
     public EditNoteCommand parse(String args) throws ParseException {
         requireNonNull(args);
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,
-                PREFIX_LESSON_INDEX, PREFIX_DATE, PREFIX_SUBJECT, PREFIX_NOTE);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenizeWithTerminalPrefix(args, PREFIX_NOTE,
+                PREFIX_LESSON_INDEX, PREFIX_DATE, PREFIX_SUBJECT);
 
         if (argMultimap.getValue(PREFIX_LESSON_INDEX).isEmpty()) {
             throw new ParseException(String.format(

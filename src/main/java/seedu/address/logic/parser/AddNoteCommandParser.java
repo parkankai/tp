@@ -26,7 +26,8 @@ public class AddNoteCommandParser implements Parser<AddNoteCommand> {
      */
     public AddNoteCommand parse(String args) throws ParseException {
         requireNonNull(args);
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_DATE, PREFIX_SUBJECT, PREFIX_NOTE);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenizeWithTerminalPrefix(
+                args, PREFIX_NOTE, PREFIX_DATE, PREFIX_SUBJECT);
 
         if (!arePrefixesPresent(argMultimap, PREFIX_DATE, PREFIX_SUBJECT, PREFIX_NOTE)) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddNoteCommand.MESSAGE_USAGE));

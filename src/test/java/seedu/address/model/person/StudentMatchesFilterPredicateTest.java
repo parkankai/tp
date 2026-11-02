@@ -123,4 +123,44 @@ public class StudentMatchesFilterPredicateTest {
 
         assertTrue(predicate.test(student));
     }
+    @Test
+    public void test_repeatedSubjectSpaces_returnsTrue() {
+        for (String storedName : Set.of("Additional Mathematics", "Additional  Mathematics")) {
+            Student student = new PersonBuilder().withSubjects(storedName, "Science").build();
+            for (String requiredName : Set.of("additional mathematics", "ADDITIONAL   MATHEMATICS")) {
+                StudentMatchesFilterPredicate predicate = new StudentMatchesFilterPredicate(
+                        Optional.empty(), Set.of(new Subject(requiredName)));
+
+                assertTrue(predicate.test(student));
+            }
+        }
+    }
+
+    @Test
+    public void test_repeatedSpacesWithMissingSubject_returnsFalse() {
+        Student student = new PersonBuilder().withSubjects("Additional  Mathematics").build();
+        StudentMatchesFilterPredicate predicate = new StudentMatchesFilterPredicate(
+                Optional.empty(), Set.of(new Subject("Additional Mathematics"), new Subject("Science")));
+
+        assertFalse(predicate.test(student));
+    }
+
+    @Test
+    public void test_repeatedSpacesWithWrongLevel_returnsFalse() {
+        Student student = new PersonBuilder().withAcademicLevel("Sec 2")
+                .withSubjects("Additional  Mathematics").build();
+        StudentMatchesFilterPredicate predicate = new StudentMatchesFilterPredicate(
+                Optional.of(new AcademicLevel("Sec 3")), Set.of(new Subject("Additional Mathematics")));
+
+        assertFalse(predicate.test(student));
+    }
+
+    @Test
+    public void test_missingWordSpace_returnsFalse() {
+        Student student = new PersonBuilder().withSubjects("Additional Mathematics").build();
+        StudentMatchesFilterPredicate predicate = new StudentMatchesFilterPredicate(
+                Optional.empty(), Set.of(new Subject("AdditionalMathematics")));
+
+        assertFalse(predicate.test(student));
+    }
 }

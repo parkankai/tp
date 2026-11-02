@@ -8,6 +8,7 @@ import static seedu.address.testutil.TypicalPersons.ALICE;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -44,6 +45,26 @@ public class StudentTest {
         Student student = new Student(ALICE.getName(), ALICE.getAcademicLevel(), ALICE.getSubjects(),
                 ALICE.getParentPhone(), ALICE.getParentEmail());
         assertTrue(student.getLessonNotes().isEmpty());
+    }
+
+    @Test
+    public void findSubject_subjectTaken_returnsProfileSubject() {
+        Student student = new PersonBuilder().withSubjects("Math", "Science").build();
+        assertEquals(Optional.of(new Subject("Math")), student.findSubject(new Subject("Math")));
+
+        // different case -> returns the subject as spelled in the profile
+        assertEquals("Math", student.findSubject(new Subject("math")).get().subjectName);
+    }
+
+    @Test
+    public void findSubject_subjectNotTaken_returnsEmpty() {
+        Student student = new PersonBuilder().withSubjects("Math").build();
+        assertTrue(student.findSubject(new Subject("Geography")).isEmpty());
+    }
+
+    @Test
+    public void findSubject_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ALICE.findSubject(null));
     }
 
     @Test

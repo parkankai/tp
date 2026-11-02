@@ -39,6 +39,23 @@ public class StringUtil {
     }
 
     /**
+     * Returns true if any word in {@code sentence} starts with {@code word}, ignoring case.
+     * @param sentence cannot be null
+     * @param word cannot be null, cannot be empty, must be a single word
+     */
+    public static boolean containsPartialWordIgnoreCase(String sentence, String word) {
+        requireNonNull(sentence);
+        requireNonNull(word);
+
+        String preppedWord = word.trim();
+        checkArgument(!preppedWord.isEmpty(), "Word parameter cannot be empty");
+        checkArgument(preppedWord.split("\\s+").length == 1, "Word parameter should be a single word");
+
+        return Arrays.stream(sentence.split("\\s+"))
+                .anyMatch(candidate -> candidate.regionMatches(true, 0, preppedWord, 0, preppedWord.length()));
+    }
+
+    /**
      * Returns a detailed message of {@code t}, including the stack trace.
      */
     public static String getDetails(Throwable t) {

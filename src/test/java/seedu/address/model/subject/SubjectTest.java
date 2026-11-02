@@ -16,7 +16,10 @@ public class SubjectTest {
 
     @Test
     public void constructor_invalidSubjectName_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> new Subject(""));
+        String expectedMessage = "Subject names should be 2 to 30 characters long, contain only letters and spaces, "
+                + "and start and end with a letter.";
+
+        assertThrows(IllegalArgumentException.class, expectedMessage, () -> new Subject(""));
         assertThrows(IllegalArgumentException.class, () -> new Subject("1"));
     }
 

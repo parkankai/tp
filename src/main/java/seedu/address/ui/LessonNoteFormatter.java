@@ -16,7 +16,7 @@ public class LessonNoteFormatter {
     /** The most recent notes shown on a card; any beyond this are summarised by a count. */
     public static final int MAX_DISPLAYED_LESSON_NOTES = 3;
 
-    /** Note text longer than this is cut short so that one note cannot dominate a card. */
+    /** Maximum number of Unicode code points included in a note preview before truncation. */
     public static final int MAX_DISPLAYED_NOTE_TEXT_LENGTH = 60;
 
     private static final String MESSAGE_MORE_LESSON_NOTES = "+ %d more";
@@ -65,14 +65,17 @@ public class LessonNoteFormatter {
     }
 
     /**
-     * Returns {@code text} cut to {@code MAX_DISPLAYED_NOTE_TEXT_LENGTH} characters, followed by
-     * an ellipsis when it was cut. The full text stays available through the history command.
+     * Returns {@code text} cut to {@code MAX_DISPLAYED_NOTE_TEXT_LENGTH} Unicode code points,
+     * followed by an ellipsis when it was cut. The full text stays available through the history command.
      */
     public static String truncate(String text) {
-        if (text.length() <= MAX_DISPLAYED_NOTE_TEXT_LENGTH) {
+        int codePointCount = text.codePointCount(0, text.length());
+        if (codePointCount <= MAX_DISPLAYED_NOTE_TEXT_LENGTH) {
             return text;
         }
-        return text.substring(0, MAX_DISPLAYED_NOTE_TEXT_LENGTH).stripTrailing() + TRUNCATION_SUFFIX;
+
+        int endIndex = text.offsetByCodePoints(0, MAX_DISPLAYED_NOTE_TEXT_LENGTH);
+        return text.substring(0, endIndex).stripTrailing() + TRUNCATION_SUFFIX;
     }
 
 }

@@ -89,6 +89,37 @@ public class AddNoteCommandTest {
     }
 
     @Test
+    public void execute_subjectNotTaken_throwsCommandException() {
+        Student firstStudent = model.getFilteredStudentList().get(INDEX_FIRST_PERSON.getZeroBased());
+        LessonNote geographyNote = new LessonNote(new LessonDate("2026-10-01"),
+                new Subject("Geography"), new NoteText("Covered maps"));
+
+        AddNoteCommand addNoteCommand = new AddNoteCommand(INDEX_FIRST_PERSON, geographyNote);
+
+        assertCommandFailure(addNoteCommand, model, String.format(Messages.MESSAGE_SUBJECT_NOT_TAKEN,
+                firstStudent.getName(), geographyNote.getSubject()));
+    }
+
+    @Test
+    public void execute_subjectInDifferentCase_storesProfileSpelling() {
+        Student firstStudent = model.getFilteredStudentList().get(INDEX_FIRST_PERSON.getZeroBased());
+        LessonNote lowerCaseNote = new LessonNote(NOTE_MATH.getDate(), new Subject("math"), NOTE_MATH.getNoteText());
+        Student editedStudent = new PersonBuilder(firstStudent).withLessonNotes(NOTE_MATH).build();
+
+        AddNoteCommand addNoteCommand = new AddNoteCommand(INDEX_FIRST_PERSON, lowerCaseNote);
+
+        String expectedMessage = String.format(AddNoteCommand.MESSAGE_ADD_NOTE_SUCCESS,
+                editedStudent.getName(), NOTE_MATH.getDate(), "Math", NOTE_MATH.getNoteText());
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setStudent(firstStudent, editedStudent);
+
+        assertCommandSuccess(addNoteCommand, model, expectedMessage, expectedModel);
+        assertEquals("Math", model.getFilteredStudentList().get(INDEX_FIRST_PERSON.getZeroBased())
+                .getLessonNotes().get(0).getSubject().subjectName);
+    }
+
+    @Test
     public void execute_filteredList_success() {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 

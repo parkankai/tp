@@ -4,7 +4,11 @@ import java.nio.file.Path;
 import java.util.logging.Logger;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
@@ -156,15 +160,37 @@ public class MainWindow extends UiPart<Stage> {
     }
 
     /**
-     * Closes the application.
+     * Closes the application after confirming any unsaved changes.
      */
     @FXML
-    private void handleExit() {
+    private void handleExit(Event event) {
+        if (logic.hasUnsavedChanges() && !confirmDiscardChanges()) {
+            if (event != null) {
+                event.consume();
+            }
+            resultDisplay.setFeedbackToUser("Exit cancelled. Your unsaved changes remain in this session.");
+            return;
+        }
         GuiSettings guiSettings = new GuiSettings(primaryStage.getWidth(), primaryStage.getHeight(),
                 (int) primaryStage.getX(), (int) primaryStage.getY());
         logic.setGuiSettings(guiSettings);
         helpWindow.hide();
         primaryStage.hide();
+    }
+
+    /**
+     * Asks the user whether to discard changes that have not been saved.
+     */
+    private boolean confirmDiscardChanges() {
+        ButtonType exitAnyway = new ButtonType("Exit anyway", ButtonData.OTHER);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                "Your latest changes have not been saved. Exiting will lose these unsaved changes. "
+                        + "Choose Cancel to stay in the app, resolve the save problem, and retry saving with list.",
+                ButtonType.CANCEL, exitAnyway);
+        alert.initOwner(primaryStage);
+        alert.setTitle("Unsaved changes");
+        alert.setHeaderText("Exit without saving?");
+        return alert.showAndWait().filter(exitAnyway::equals).isPresent();
     }
 
     public PersonListPanel getPersonListPanel() {
@@ -187,7 +213,7 @@ public class MainWindow extends UiPart<Stage> {
             }
 
             if (commandResult.isExit()) {
-                handleExit();
+                handleExit(null);
             }
 
             return commandResult;

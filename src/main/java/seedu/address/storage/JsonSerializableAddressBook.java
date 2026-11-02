@@ -37,6 +37,9 @@ class JsonSerializableAddressBook {
     public AddressBook toModelType() throws IllegalValueException {
         AddressBook addressBook = new AddressBook();
         for (JsonAdaptedStudent jsonAdaptedStudent : students) {
+            if (jsonAdaptedStudent == null) {
+                throw new IllegalValueException("Students list contains null student(s).");
+            }
             Student student = jsonAdaptedStudent.toModelType();
             if (addressBook.hasStudent(student)) {
                 throw new IllegalValueException(MESSAGE_DUPLICATE_STUDENT);

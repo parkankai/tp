@@ -11,14 +11,20 @@ import java.util.Locale;
  */
 public class Name {
 
+    /** Error message shown when a student name fail. */
     public static final String MESSAGE_CONSTRAINTS =
-            "Names should only contain alphanumeric characters, spaces, - and /, and it should not be blank";
+            "Names should only contain letters, accent marks, digits, spaces, apostrophes, - and /, "
+                    + "must contain at least one letter or digit, and should be at most 60 characters long.";
+
+    public static final int MAX_LENGTH = 60;
 
     /*
-     * The first character of the name must not be a whitespace,
-     * otherwise " " (a blank string) becomes a valid input.
+     * The lookahead requires at least one letter or digit anywhere in the name.
+     * Allows Unicode letters, combining accent marks, and straight or curly apostrophes.
+     * The first character must be a letter, an ASCII digit, a slash, or a hyphen.
      */
-    public static final String VALIDATION_REGEX = "[\\p{Alnum}/\\-][\\p{Alnum}/\\- ]*";
+    public static final String VALIDATION_REGEX =
+            "(?=.*[\\p{L}0-9])[\\p{L}0-9/\\-][\\p{L}\\p{M}0-9/\\- '\u2019]*";
 
     public final String fullName;
 
@@ -38,7 +44,7 @@ public class Name {
      * Returns true if a given string is a valid name.
      */
     public static boolean isValidName(String test) {
-        return test.matches(VALIDATION_REGEX);
+        return test.length() <= MAX_LENGTH && test.matches(VALIDATION_REGEX);
     }
 
 

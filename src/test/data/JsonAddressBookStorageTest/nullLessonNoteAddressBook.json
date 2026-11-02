@@ -1,0 +1,12 @@
+{
+  "students": [
+    {
+      "name": "Alice",
+      "academicLevel": "Sec 2",
+      "subjects": ["Math"],
+      "parentPhone": "91234567",
+      "parentEmail": "alice@example.com",
+      "lessonNotes": [null]
+    }
+  ]
+}

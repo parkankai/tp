@@ -1,7 +1,7 @@
 {
   "baseUrl": "",
   "titlePrefix": "TutorBroPro",
-  "titleSuffix": "AddressBook Level-3",
+  "titleSuffix": "Student Management Platform",
   "faviconPath": "images/SeEduLogo.png",
   "style": {
     "codeTheme": "light"

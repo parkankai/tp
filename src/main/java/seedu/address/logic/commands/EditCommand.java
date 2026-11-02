@@ -33,7 +33,8 @@ public class EditCommand extends Command {
             + "[n/NAME] [lvl/LEVEL] [s/SUBJECT]... [pn/PARENT_PHONE] [pe/PARENT_EMAIL]";
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited student: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
-    public static final String MESSAGE_DUPLICATE_PERSON = "This student already exists in the address book.";
+    public static final String MESSAGE_DUPLICATE_PERSON =
+            "Another student (%1$s) already has this name and parent phone number.";
 
     public static final String MESSAGE_SUBJECT_REQUIRED = "A student must have at least one nonblank subject.";
 
@@ -84,9 +85,15 @@ public class EditCommand extends Command {
         assert editedStudent.getLessonNotes().equals(studentToEdit.getLessonNotes())
                 : "Editing a student profile must preserve lesson notes";
 
-        if (!studentToEdit.isSameStudent(editedStudent) && model.hasStudent(editedStudent)) {
-            logger.fine("Student edit rejected: duplicate student.");
-            throw new CommandException(MESSAGE_DUPLICATE_PERSON);
+        if (!studentToEdit.isSameStudent(editedStudent)) {
+            Optional<Student> clashingStudent = model.getAddressBook().getStudentList().stream()
+                    .filter(editedStudent::isSameStudent)
+                    .findFirst();
+            if (clashingStudent.isPresent()) {
+                logger.fine("Student edit rejected: duplicate student.");
+                throw new CommandException(String.format(MESSAGE_DUPLICATE_PERSON,
+                        clashingStudent.get().getName()));
+            }
         }
 
         model.setStudent(studentToEdit, editedStudent);

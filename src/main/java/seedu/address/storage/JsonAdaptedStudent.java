@@ -88,7 +88,7 @@ class JsonAdaptedStudent {
 
         Set<Subject> modelSubjects = new HashSet<>();
         for (String subject : subjects) {
-            if (!Subject.isValidSubjectName(subject)) {
+            if (subject == null || !Subject.isValidSubjectName(subject)) {
                 throw new IllegalValueException(Subject.MESSAGE_CONSTRAINTS);
             }
             modelSubjects.add(new Subject(subject));
@@ -96,6 +96,9 @@ class JsonAdaptedStudent {
 
         List<LessonNote> modelLessonNotes = new ArrayList<>();
         for (JsonAdaptedLessonNote lessonNote : lessonNotes) {
+            if (lessonNote == null) {
+                throw new IllegalValueException("Lesson notes list contains null lesson note(s).");
+            }
             modelLessonNotes.add(lessonNote.toModelType());
         }
 

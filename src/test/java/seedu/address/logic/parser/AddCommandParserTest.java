@@ -65,6 +65,17 @@ public class AddCommandParserTest {
     }
 
     @Test
+    public void parse_nameWithSonOf_success() {
+        Student expectedStudent = new PersonBuilder().withName("Ravi s/o Kumar")
+                .withAcademicLevel("Pri 5").withSubjects("Math").withPhone("92222222")
+                .withEmail("bob@example.com").build();
+        String userInput = " n/Ravi s/o Kumar" + LEVEL_DESC_BOB + SUBJECT_DESC_MATH
+                + PARENT_PHONE_DESC_BOB + PARENT_EMAIL_DESC_BOB;
+
+        assertParseSuccess(parser, userInput, new AddCommand(expectedStudent));
+    }
+
+    @Test
     public void duplicateSubjects_merge_success() {
         Student expectedStudent = new PersonBuilder().withSubjects("Math").build();
         String userInput = NAME_DESC_BOB + LEVEL_DESC_BOB + " s/Math s/math"
@@ -104,6 +115,16 @@ public class AddCommandParserTest {
                 Phone.MESSAGE_CONSTRAINTS);
         assertParseFailure(parser, validInput.replace(PARENT_EMAIL_DESC_BOB, INVALID_PARENT_EMAIL_DESC),
                 Email.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
+    public void parse_nameExceedsMaximumLength_failure() {
+        String validInput = NAME_DESC_BOB + LEVEL_DESC_BOB + SUBJECT_DESC_MATH
+                + PARENT_PHONE_DESC_BOB + PARENT_EMAIL_DESC_BOB;
+        String longName = "a".repeat(Name.MAX_LENGTH + 1);
+
+        assertParseFailure(parser, validInput.replace("n/Bob Choo", "n/" + longName),
+                Name.MESSAGE_CONSTRAINTS);
     }
 
     @Test

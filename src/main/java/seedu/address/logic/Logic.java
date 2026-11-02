@@ -20,6 +20,9 @@ public interface Logic {
      */
     CommandResult execute(String commandText) throws CommandException, ParseException;
 
+    /** Returns whether student data differs from the startup state or the last successful save. */
+    boolean hasUnsavedChanges();
+
     /** Returns an unmodifiable view of the filtered list of persons */
     ObservableList<Student> getFilteredStudentList();
 

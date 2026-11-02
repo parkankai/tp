@@ -16,6 +16,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.lesson.LessonNote;
 import seedu.address.model.person.Student;
+import seedu.address.model.subject.Subject;
 
 /**
  * Adds a lesson note to an existing student in the address book.
@@ -66,13 +67,19 @@ public class AddNoteCommand extends Command {
 
         Student studentToEdit = lastShownList.get(index.getZeroBased());
 
-        if (studentToEdit.getLessonNotes().contains(lessonNote)) {
+        Subject subject = studentToEdit.findSubject(lessonNote.getSubject())
+                .orElseThrow(() -> new CommandException(String.format(Messages.MESSAGE_SUBJECT_NOT_TAKEN,
+                        studentToEdit.getName(), lessonNote.getSubject())));
+        // Store the subject as it is spelled in the student's profile
+        LessonNote noteToAdd = new LessonNote(lessonNote.getDate(), subject, lessonNote.getNoteText());
+
+        if (studentToEdit.getLessonNotes().contains(noteToAdd)) {
             throw new CommandException(MESSAGE_DUPLICATE_NOTE);
         }
 
         // getLessonNotes() is unmodifiable, so the new note is appended to a copy
         List<LessonNote> updatedLessonNotes = new ArrayList<>(studentToEdit.getLessonNotes());
-        updatedLessonNotes.add(lessonNote);
+        updatedLessonNotes.add(noteToAdd);
 
         Student editedStudent = new Student(studentToEdit.getName(), studentToEdit.getAcademicLevel(),
                 studentToEdit.getSubjects(), studentToEdit.getParentPhone(), studentToEdit.getParentEmail(),
@@ -80,15 +87,15 @@ public class AddNoteCommand extends Command {
 
         model.setStudent(studentToEdit, editedStudent);
 
-        return new CommandResult(generateSuccessMessage(editedStudent));
+        return new CommandResult(generateSuccessMessage(editedStudent, noteToAdd));
     }
 
     /**
      * Generates a command execution success message naming the student and the lesson note added.
      */
-    private String generateSuccessMessage(Student editedStudent) {
-        return String.format(MESSAGE_ADD_NOTE_SUCCESS, editedStudent.getName(), lessonNote.getDate(),
-                lessonNote.getSubject(), lessonNote.getNoteText());
+    private String generateSuccessMessage(Student editedStudent, LessonNote addedNote) {
+        return String.format(MESSAGE_ADD_NOTE_SUCCESS, editedStudent.getName(), addedNote.getDate(),
+                addedNote.getSubject(), addedNote.getNoteText());
     }
 
     @Override

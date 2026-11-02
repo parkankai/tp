@@ -123,6 +123,40 @@ public class StringUtilTest {
         assertTrue(StringUtil.containsWordIgnoreCase("AAA bBb ccc  bbb", "bbB"));
     }
 
+    //---------------- Tests for containsPartialWordIgnoreCase -----------------------------
+
+    @Test
+    public void containsPartialWordIgnoreCase_nullWord_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> StringUtil.containsPartialWordIgnoreCase("sentence", null));
+    }
+
+    @Test
+    public void containsPartialWordIgnoreCase_emptyWord_throwsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, "Word parameter cannot be empty", ()
+            -> StringUtil.containsPartialWordIgnoreCase("typical sentence", "  "));
+    }
+
+    @Test
+    public void containsPartialWordIgnoreCase_multipleWords_throwsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, "Word parameter should be a single word", ()
+            -> StringUtil.containsPartialWordIgnoreCase("typical sentence", "typical sentence"));
+    }
+
+    @Test
+    public void containsPartialWordIgnoreCase_nullSentence_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> StringUtil.containsPartialWordIgnoreCase(null, "abc"));
+    }
+
+    @Test
+    public void containsPartialWordIgnoreCase_validInputs_correctResult() {
+        assertFalse(StringUtil.containsPartialWordIgnoreCase("", "abc"));
+        assertFalse(StringUtil.containsPartialWordIgnoreCase("Jack Neo", "ack"));
+        assertFalse(StringUtil.containsPartialWordIgnoreCase("Jack Neo", "Neos"));
+        assertTrue(StringUtil.containsPartialWordIgnoreCase("Jack Neo", "J"));
+        assertTrue(StringUtil.containsPartialWordIgnoreCase("Jack Neo", "ja"));
+        assertTrue(StringUtil.containsPartialWordIgnoreCase("Jack Neo", "  NEO  "));
+    }
+
     //---------------- Tests for getDetails --------------------------------------
 
     /*

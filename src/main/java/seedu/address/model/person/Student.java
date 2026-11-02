@@ -1,5 +1,6 @@
 package seedu.address.model.person;
 
+import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
@@ -9,6 +10,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import seedu.address.commons.util.ToStringBuilder;
@@ -82,6 +84,15 @@ public class Student {
      */
     public List<LessonNote> getLessonNotes() {
         return lessonNotes;
+    }
+
+    /**
+     * Returns the subject in this student's profile that matches {@code subject}, ignoring case,
+     * or an empty {@code Optional} if the student does not take it.
+     */
+    public Optional<Subject> findSubject(Subject subject) {
+        requireNonNull(subject);
+        return subjects.stream().filter(subject::equals).findFirst();
     }
 
     /** Returns true if both students have the same name and same parent phone number */

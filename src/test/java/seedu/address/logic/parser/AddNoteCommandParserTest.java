@@ -42,12 +42,30 @@ public class AddNoteCommandParserTest {
     }
 
     @Test
-    public void parse_fieldsInAnyOrder_success() {
-        String userInput = INDEX_FIRST_PERSON.getOneBased() + NOTE_DESC + DATE_DESC + SUBJECT_DESC;
+    public void parse_fieldsBeforeNoteInAnyOrder_success() {
+        String userInput = INDEX_FIRST_PERSON.getOneBased() + SUBJECT_DESC + DATE_DESC + NOTE_DESC;
         LessonNote expectedNote = new LessonNote(new LessonDate(VALID_DATE), new Subject(VALID_SUBJECT),
                 new NoteText(VALID_NOTE));
 
         assertParseSuccess(parser, userInput, new AddNoteCommand(INDEX_FIRST_PERSON, expectedNote));
+    }
+
+    @Test
+    public void parse_noteContainsCommandPrefixes_success() {
+        String noteWithPrefixes = "Practised s/ notation d/ daily note/ carefully ln/1";
+        String userInput = INDEX_FIRST_PERSON.getOneBased() + DATE_DESC + SUBJECT_DESC
+                + " " + PREFIX_NOTE + noteWithPrefixes;
+        LessonNote expectedNote = new LessonNote(new LessonDate(VALID_DATE), new Subject(VALID_SUBJECT),
+                new NoteText(noteWithPrefixes));
+
+        assertParseSuccess(parser, userInput, new AddNoteCommand(INDEX_FIRST_PERSON, expectedNote));
+    }
+
+    @Test
+    public void parse_fieldsAfterNote_failure() {
+        String userInput = INDEX_FIRST_PERSON.getOneBased() + NOTE_DESC + DATE_DESC + SUBJECT_DESC;
+
+        assertParseFailure(parser, userInput, MESSAGE_INVALID_FORMAT);
     }
 
     @Test
@@ -117,8 +135,5 @@ public class AddNoteCommandParserTest {
 
         assertParseFailure(parser, INDEX_FIRST_PERSON.getOneBased() + DATE_DESC + SUBJECT_DESC + SUBJECT_DESC
                 + NOTE_DESC, Messages.getErrorMessageForDuplicatePrefixes(PREFIX_SUBJECT));
-
-        assertParseFailure(parser, INDEX_FIRST_PERSON.getOneBased() + DATE_DESC + SUBJECT_DESC + NOTE_DESC
-                + NOTE_DESC, Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NOTE));
     }
 }

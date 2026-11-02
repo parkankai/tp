@@ -12,6 +12,7 @@ import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.AddressBookParser;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.person.Student;
 import seedu.address.storage.Storage;
@@ -27,6 +28,7 @@ public class LogicManager implements Logic {
 
     private final Logger logger = LogsCenter.getLogger(LogicManager.class);
 
+    private AddressBook savedAddressBook;
     private final Model model;
     private final Storage storage;
     private final AddressBookParser addressBookParser;
@@ -37,6 +39,7 @@ public class LogicManager implements Logic {
     public LogicManager(Model model, Storage storage) {
         this.model = model;
         this.storage = storage;
+        savedAddressBook = new AddressBook(model.getAddressBook());
         addressBookParser = new AddressBookParser();
     }
 
@@ -48,8 +51,14 @@ public class LogicManager implements Logic {
         Command command = addressBookParser.parseCommand(commandText);
         commandResult = command.execute(model);
 
+        // Help and Exit do not modify address book data and must not depend on saving it.
+        if (commandResult.isShowHelp() || commandResult.isExit()) {
+            return commandResult;
+        }
+
         try {
             storage.saveAddressBook(model.getAddressBook());
+            savedAddressBook = new AddressBook(model.getAddressBook());
         } catch (AccessDeniedException e) {
             throw new CommandException(String.format(FILE_OPS_PERMISSION_ERROR_FORMAT, e.getMessage()), e);
         } catch (IOException ioe) {
@@ -57,6 +66,11 @@ public class LogicManager implements Logic {
         }
 
         return commandResult;
+    }
+
+    @Override
+    public boolean hasUnsavedChanges() {
+        return !savedAddressBook.getStudentList().equals(model.getAddressBook().getStudentList());
     }
 
     @Override

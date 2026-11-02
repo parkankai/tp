@@ -85,4 +85,22 @@ public class EmailTest {
 
         assertEquals(email.value.hashCode(), email.hashCode());
     }
+
+    @Test
+    public void constructor_apostropheAndConsecutiveUnderscores_success() {
+        assertEquals("alex__parent@example.com",
+                new Email("alex__parent@example.com").value);
+        assertEquals("o'connor@example.com",
+                new Email("o'connor@example.com").value);
+    }
+
+    @Test
+    public void isValidEmail_specialCharacters_preservesInvalidInputChecks() {
+        assertFalse(Email.isValidEmail("alex..parent@example.com"));
+        assertFalse(Email.isValidEmail("alex__..parent@example.com"));
+        assertFalse(Email.isValidEmail(".alex@example.com"));
+        assertFalse(Email.isValidEmail("alex.@example.com"));
+        assertFalse(Email.isValidEmail("alex parent@example.com"));
+        assertFalse(Email.isValidEmail("alex@exam_ple.com"));
+    }
 }

@@ -50,6 +50,21 @@ public class JsonUtil {
      */
     public static <T> Optional<T> readJsonFile(
             Path filePath, Class<T> classOfObjectToDeserialize) throws DataLoadingException {
+        return readJsonFileWithMapper(filePath, classOfObjectToDeserialize, objectMapper);
+    }
+
+    /**
+     * Reads a JSON file and rejects properties that are not part of the expected schema.
+     */
+    public static <T> Optional<T> readJsonFileStrict(
+            Path filePath, Class<T> classOfObjectToDeserialize) throws DataLoadingException {
+        ObjectMapper strictMapper = objectMapper.copy()
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+        return readJsonFileWithMapper(filePath, classOfObjectToDeserialize, strictMapper);
+    }
+
+    private static <T> Optional<T> readJsonFileWithMapper(
+            Path filePath, Class<T> classOfObjectToDeserialize, ObjectMapper mapper) throws DataLoadingException {
         requireNonNull(filePath);
 
         if (!Files.exists(filePath)) {
@@ -60,10 +75,16 @@ public class JsonUtil {
         T jsonFile;
 
         try {
-            jsonFile = deserializeObjectFromJsonFile(filePath, classOfObjectToDeserialize);
+            jsonFile = mapper.readValue(FileUtil.readFromFile(filePath), classOfObjectToDeserialize);
         } catch (IOException e) {
             logger.warning("Error reading from jsonFile file " + filePath + ": " + e);
             throw new DataLoadingException(e);
+        }
+
+        if (jsonFile == null) {
+            IOException exception = new IOException("JSON document must not be null");
+            logger.warning("Error reading from jsonFile file " + filePath + ": " + exception);
+            throw new DataLoadingException(exception);
         }
 
         return Optional.of(jsonFile);

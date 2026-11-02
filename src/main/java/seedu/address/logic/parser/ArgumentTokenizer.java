@@ -1,5 +1,7 @@
 package seedu.address.logic.parser;
 
+import static seedu.address.logic.parser.CliSyntax.PREFIX_SUBJECT;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +17,9 @@ import java.util.stream.Collectors;
  */
 public class ArgumentTokenizer {
 
+    /** Text that begins with the subject prefix but belongs to a name, as in "Ravi s/o Kumar". */
+    private static final String SON_OF = "s/o";
+
     /**
      * Tokenizes an arguments string and returns an {@code ArgumentMultimap} object that maps prefixes to their
      * respective argument values. Only the given prefixes will be recognized in the arguments string.
@@ -26,6 +31,25 @@ public class ArgumentTokenizer {
     public static ArgumentMultimap tokenize(String argsString, Prefix... prefixes) {
         List<PrefixPosition> positions = findAllPrefixPositions(argsString, prefixes);
         return extractArguments(argsString, positions);
+    }
+
+    /**
+     * Tokenizes an arguments string while treating the first occurrence of {@code terminalPrefix}
+     * as the final argument. Any prefix-like text after it is retained as part of its value.
+     */
+    public static ArgumentMultimap tokenizeWithTerminalPrefix(String argsString, Prefix terminalPrefix,
+                                                               Prefix... prefixes) {
+        int terminalPrefixPosition = findPrefixPosition(argsString, terminalPrefix.getPrefix(), 0);
+        if (terminalPrefixPosition == -1) {
+            return tokenize(argsString, prefixes);
+        }
+
+        String argsBeforeTerminalPrefix = argsString.substring(0, terminalPrefixPosition);
+        ArgumentMultimap argMultimap = tokenize(argsBeforeTerminalPrefix, prefixes);
+        String terminalValue = argsString.substring(terminalPrefixPosition + terminalPrefix.getPrefix().length())
+                .trim();
+        argMultimap.put(terminalPrefix, terminalValue);
+        return argMultimap;
     }
 
     /**
@@ -49,12 +73,27 @@ public class ArgumentTokenizer {
 
         int prefixPosition = findPrefixPosition(argsString, prefix.getPrefix(), 0);
         while (prefixPosition != -1) {
-            PrefixPosition extendedPrefix = new PrefixPosition(prefix, prefixPosition);
-            positions.add(extendedPrefix);
+            if (!isSonOf(argsString, prefix, prefixPosition)) {
+                PrefixPosition extendedPrefix = new PrefixPosition(prefix, prefixPosition);
+                positions.add(extendedPrefix);
+            }
             prefixPosition = findPrefixPosition(argsString, prefix.getPrefix(), prefixPosition);
         }
 
         return positions;
+    }
+
+    /**
+     * Returns true if the {@code prefix} found at {@code position} is the subject prefix starting a
+     * lowercase "s/o" that is followed by whitespace or the end of {@code argsString}. Such text is
+     * part of a name like "Ravi s/o Kumar", not the start of a subject.
+     */
+    private static boolean isSonOf(String argsString, Prefix prefix, int position) {
+        if (!prefix.equals(PREFIX_SUBJECT) || !argsString.startsWith(SON_OF, position)) {
+            return false;
+        }
+        int endPosition = position + SON_OF.length();
+        return endPosition == argsString.length() || Character.isWhitespace(argsString.charAt(endPosition));
     }
 
     /**

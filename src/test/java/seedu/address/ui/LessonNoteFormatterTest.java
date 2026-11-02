@@ -102,4 +102,38 @@ public class LessonNoteFormatterTest {
         assertEquals("a".repeat(LessonNoteFormatter.MAX_DISPLAYED_NOTE_TEXT_LENGTH - 1) + "...",
                 LessonNoteFormatter.truncate(text));
     }
+
+    @Test
+    public void truncate_emojiAtLimit_preservesWholeEmoji() {
+        String prefix = "a".repeat(LessonNoteFormatter.MAX_DISPLAYED_NOTE_TEXT_LENGTH - 1);
+        String emoji = "\ud83d\ude00";
+
+        assertEquals(prefix + emoji + "...", LessonNoteFormatter.truncate(prefix + emoji + "extra"));
+        assertEquals(prefix + emoji, LessonNoteFormatter.truncate(prefix + emoji));
+    }
+
+    @Test
+    public void truncate_emojiAfterLimit_excludesWholeEmoji() {
+        String prefix = "a".repeat(LessonNoteFormatter.MAX_DISPLAYED_NOTE_TEXT_LENGTH);
+
+        assertEquals(prefix + "...", LessonNoteFormatter.truncate(prefix + "\ud83d\ude00"));
+    }
+
+    @Test
+    public void truncate_multipleEmojis_countsCodePoints() {
+        String atLimit = "\ud83d\ude00".repeat(LessonNoteFormatter.MAX_DISPLAYED_NOTE_TEXT_LENGTH);
+
+        assertEquals(atLimit, LessonNoteFormatter.truncate(atLimit));
+        assertEquals(atLimit + "...", LessonNoteFormatter.truncate(atLimit + "extra"));
+    }
+
+    @Test
+    public void formatNote_emojiAtLimit_preservesEmojiAndFullNote() {
+        String preview = "a".repeat(LessonNoteFormatter.MAX_DISPLAYED_NOTE_TEXT_LENGTH - 1) + "\ud83d\ude00";
+        String fullText = preview + " Great progress";
+        LessonNote lessonNote = note("2026-10-01", "Math", fullText);
+
+        assertEquals("1. 2026-10-01 | Math | " + preview + "...", LessonNoteFormatter.formatNote(1, lessonNote));
+        assertEquals(fullText, lessonNote.getNoteText().value);
+    }
 }

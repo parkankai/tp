@@ -11,11 +11,18 @@ public class Email {
 
     public static final String MESSAGE_CONSTRAINTS = "Emails should be of the format example@domain";
 
-    private static final String SPECIAL_CHARACTERS = "+_.-";
-    // alphanumeric and special characters
-    private static final String ALPHANUMERIC_NO_UNDERSCORE = "[^\\W_]+"; // alphanumeric characters except underscore
-    private static final String LOCAL_PART_REGEX = "^" + ALPHANUMERIC_NO_UNDERSCORE + "([" + SPECIAL_CHARACTERS + "]"
-            + ALPHANUMERIC_NO_UNDERSCORE + ")*";
+    // Keep '-' last so it is treated literally inside the regex character class.
+    private static final String SPECIAL_CHARACTERS = "+_.'-";
+    private static final String ALPHANUMERIC_NO_UNDERSCORE = "[^\\W_]+";
+
+    /*
+     * The local part must start and end with an alphanumeric character.
+     * Apostrophes and consecutive special characters are allowed internally.
+     * The negative lookahead rejects consecutive dots before '@'.
+     */
+    private static final String LOCAL_PART_REGEX =
+            "^(?![^@]*\\.\\.)" + ALPHANUMERIC_NO_UNDERSCORE
+                    + "([" + SPECIAL_CHARACTERS + "]+" + ALPHANUMERIC_NO_UNDERSCORE + ")*";
     private static final String DOMAIN_PART_REGEX = ALPHANUMERIC_NO_UNDERSCORE
             + "(-" + ALPHANUMERIC_NO_UNDERSCORE + ")*";
     private static final String DOMAIN_REGEX = DOMAIN_PART_REGEX
