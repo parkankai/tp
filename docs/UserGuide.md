@@ -48,7 +48,7 @@ TutorBroPro is a **desktop application for freelance private tutors to manage st
 
    * `deletestudent 3` : Deletes the 3rd student shown in the current list.
 
-   * `deletenote 1 ln/2` : Deletes the 2nd lesson note of the 1st student.
+   * `deletenote 1 ln/1` : Deletes the 1nd lesson note of the 1st student.
 
    * `exit` : Exits the app.
 
