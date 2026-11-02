@@ -731,14 +731,14 @@ testers are expected to do more *exploratory* testing.
 
    1. Download the JAR file and copy it into an empty folder.
 
-   1. From a terminal in the folder containing the JAR, run `java -jar addressbook.jar`.<br>
+   1. From a terminal in the folder containing the JAR, run `java -jar "[CS2103T-F11-4][TutorBroPro].jar"`.<br>
       Expected: The GUI opens with a set of sample students. The window size may not be optimal. If double-clicking the JAR is supported on the operating system, it may also be used.
 
 1. Saving window preferences
 
    1. Resize the window to an optimal size. Move the window to a different location. Close the window.
 
-   1. Relaunch the app with `java -jar addressbook.jar`.<br>
+   1. Relaunch the app with `java -jar "[CS2103T-F11-4][TutorBroPro].jar"`.<br>
        Expected: The most recent window size and location are retained.
 
 ### Adding a student
