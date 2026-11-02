@@ -3,7 +3,7 @@
 skinparam ArrowFontStyle plain
 
 box Logic LOGIC_COLOR_T1
-participant ":LogicManager" as Logic LOGIC_COLOR
+participant ":LogicManager" as LogicManager LOGIC_COLOR
 participant ":EditNoteCommand" as Command LOGIC_COLOR
 participant "result:CommandResult" as Result LOGIC_COLOR
 end box
@@ -15,14 +15,14 @@ participant "editedNote:LessonNote" as Note MODEL_COLOR
 participant "editedStudent:Student" as Edited MODEL_COLOR
 end box
 
-note over Logic, Edited
+note over LogicManager, Edited
 Successful execution after parsing.
 Both indices and supplied field values are valid.
 Collection operations and simple getters are omitted.
 end note
 
-Logic -> Command : execute(model)
-activate Logic
+LogicManager -> Command : execute(model)
+activate LogicManager
 activate Command
 Command -> Model : getFilteredStudentList()
 activate Model
@@ -66,7 +66,7 @@ deactivate Model
 
 create Result
 Command -> Result : CommandResult(successMessage)
-Command --> Logic : result
+Command --> LogicManager : result
 deactivate Command
-deactivate Logic
+deactivate LogicManager
 @enduml

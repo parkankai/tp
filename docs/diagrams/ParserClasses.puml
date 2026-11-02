@@ -100,11 +100,11 @@ AddCommandParser ..> ParserUtil
 EditCommandParser ..> ParserUtil
 FilterCommandParser ..> ParserUtil
 AddNoteCommandParser ..> ParserUtil
+DeleteCommandParser ..> ParserUtil
 DeleteNoteCommandParser ..> ParserUtil
 EditNoteCommandParser ..> ParserUtil
 HistoryCommandParser ..> ParserUtil
 ViewCommandParser ..> ParserUtil
-ParserUtil .down.> Prefix
 ArgumentTokenizer .down.> Prefix
 AddCommand -up-|> Command
 AddNoteCommand -up-|> Command
