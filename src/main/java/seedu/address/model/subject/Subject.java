@@ -42,6 +42,22 @@ public class Subject {
         return test.matches(VALIDATION_REGEX);
     }
 
+    /**
+     * Returns the subject name with consecutive spaces replaced by a single space.
+     */
+    public static String normalizeName(String subjectName) {
+        requireNonNull(subjectName);
+        return subjectName.replaceAll(" +", " ");
+    }
+
+    /**
+     * Returns true if both subjects have the same name, ignoring case and repeated spaces.
+     */
+    public boolean matches(Subject other) {
+        requireNonNull(other);
+        return normalizeName(subjectName).equalsIgnoreCase(normalizeName(other.subjectName));
+    }
+
     @Override
     public String toString() {
         return subjectName;

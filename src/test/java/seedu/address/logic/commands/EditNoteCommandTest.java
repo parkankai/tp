@@ -191,6 +191,26 @@ public class EditNoteCommandTest {
     }
 
     @Test
+    public void execute_editSubjectWithDifferentSpacing_storesProfileSpelling() {
+        Student originalStudent = model.getFilteredStudentList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Student seededStudent = new PersonBuilder(originalStudent)
+                .withSubjects("Additional  Mathematics")
+                .withLessonNotes(OLDER_NOTE).build();
+        model.setStudent(originalStudent, seededStudent);
+        LessonNote editedNote = new LessonNote(OLDER_NOTE.getDate(),
+                new Subject("Additional  Mathematics"), OLDER_NOTE.getNoteText());
+        EditNoteCommand command = new EditNoteCommand(INDEX_FIRST_PERSON, INDEX_FIRST_PERSON,
+                Optional.empty(), Optional.of(new Subject("Additional Mathematics")), Optional.empty());
+
+        assertCommandSuccess(command, model, String.format(EditNoteCommand.MESSAGE_EDIT_NOTE_SUCCESS,
+                INDEX_FIRST_PERSON.getOneBased(), seededStudent.getName()),
+                createExpectedModel(seededStudent, new PersonBuilder(seededStudent)
+                        .withLessonNotes(editedNote).build()));
+        assertEquals("Additional  Mathematics", model.getFilteredStudentList()
+                .get(INDEX_FIRST_PERSON.getZeroBased()).getLessonNotes().get(0).getSubject().subjectName);
+    }
+
+    @Test
     public void execute_editTextOfNoteForSubjectNoLongerTaken_success() {
         // The first student does not take Science, but the note was recorded for it earlier
         Student seededStudent = seedFirstStudentWith(OLDER_NOTE);
