@@ -476,6 +476,12 @@ The following rules apply to these use cases:
 
   Use case resumes from step 1.
 
+* 1d. TutorBroPro detects that the student already has a lesson note with the same date, subject and note text.
+
+  * 1d1. TutorBroPro informs the tutor that the lesson note already exists.
+
+  Use case resumes from step 1.
+
 **Use case: UC04 - View a student's lesson history**
 
 **Preconditions:** A student list is displayed.
@@ -963,7 +969,7 @@ testers are expected to do more *exploratory* testing.
    1. Prerequisites: Close the app. Open `data/addressbook.json` in a text editor and make it invalid, for example by deleting a closing brace or setting a student's `parentPhone` to `"abc"`.
 
    1. Relaunch the app.<br>
-      Expected: The app starts with an **empty** student list rather than sample data, and `addressbook.log.0` records that the data file could not be loaded. The invalid file is left on disk until a command writes new data over it, so back it up first if you want to keep it.
+      Expected: The app starts with an **empty** student list rather than sample data. A warning dialog states that the invalid file was moved to `data/addressbook.corrupted-1.json`, and `addressbook.log.0` records the same. Running a command saves the empty list to a new `data/addressbook.json`; the moved file is left untouched.
 
 1. Automatic saving and exiting
 
