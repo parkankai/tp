@@ -49,7 +49,7 @@ UniqueStudentList --> "~* students" Student
 
 Student *--> Name
 Student *--> AcademicLevel
-Student *--> "0..*" Subject
+Student *--> "1..*" Subject
 Student *--> Phone
 Student *--> Email
 Student *--> "*" LessonNote

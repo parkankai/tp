@@ -62,10 +62,12 @@ then read that student's lesson notes.
 end note
 
 alt studentToEdit has no lesson notes
-    DeleteNoteCommand --> LogicManager : CommandException(MESSAGE_NO_LESSON_NOTES)
+    DeleteNoteCommand --> LogicManager : throws CommandException(MESSAGE_NO_LESSON_NOTES)
+    [<-- LogicManager : throws CommandException
 
 else lessonIndex is outside the note list
-    DeleteNoteCommand --> LogicManager : CommandException(MESSAGE_INVALID_LESSON_NOTE_INDEX)
+    DeleteNoteCommand --> LogicManager : throws CommandException(MESSAGE_INVALID_LESSON_NOTE_INDEX)
+    [<-- LogicManager : throws CommandException
 
 else lessonIndex is valid
     note right of DeleteNoteCommand
@@ -86,9 +88,8 @@ else lessonIndex is valid
     deactivate CommandResult
 
     DeleteNoteCommand --> LogicManager : r
+    [<-- LogicManager : r
 end
 deactivate DeleteNoteCommand
-
-[<-- LogicManager : r
 deactivate LogicManager
 @enduml

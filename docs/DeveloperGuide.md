@@ -672,6 +672,12 @@ Deletion is immediate, without a confirmation prompt or an undo operation.
 
   Use case resumes from step 1.
 
+* 1e. TutorBroPro detects that the edited lesson note would duplicate another lesson note belonging to the student.
+
+  * 1e1. TutorBroPro informs the tutor that a lesson note with the same date, subject and note text already exists.
+
+  Use case resumes from step 1.
+
 **Use case: UC10 - Delete a lesson note**
 
 **Preconditions:** A student list is displayed, and the target student has the relevant lesson-note index.

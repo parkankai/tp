@@ -68,7 +68,7 @@ TutorBroPro is a **desktop application for freelance private tutors to manage st
 * Items followed by `...` can appear multiple times; whether they are optional depends on the command.<br>
   For example, `s/SUBJECT...` may be written as `s/Math` or `s/Math s/Science`, and `addstudent` requires at least one subject.
 
-* Prefixed parameters can generally appear in any order. However, for `addnote`and `editnote`, `note/` must come last when provided: everything after it is treated as note text, including text resembling other parameters.<br>
+* Prefixed parameters can generally appear in any order. However, for `addnote` and `editnote`, `note/` must come last when provided: everything after it is treated as note text, including text resembling other parameters.<br>
   For example, `addnote 1 s/Math d/2026-10-01 note/Revised algebra`
   is valid because `note/` comes after the other parameters.
 
