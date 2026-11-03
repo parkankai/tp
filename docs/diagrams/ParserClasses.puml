@@ -5,12 +5,36 @@ skinparam arrowColor LOGIC_COLOR_T4
 skinparam classBackgroundColor LOGIC_COLOR
 
 Class "{abstract}\nCommand" as Command
-Class XYZCommand
+Class AddCommand
+Class AddNoteCommand
+Class ClearCommand
+Class DeleteCommand
+Class DeleteNoteCommand
+Class EditCommand
+Class EditNoteCommand
+Class ExitCommand
+Class FilterCommand
+Class FindCommand
+Class NameContainsKeywordsPredicate
+Class StudentMatchesFilterPredicate
+Class HelpCommand
+Class HistoryCommand
+Class ListCommand
+Class ViewCommand
 
 package "Parser classes"{
 Class "<<interface>>\nParser" as Parser
 Class AddressBookParser
-Class XYZCommandParser
+Class AddCommandParser
+Class AddNoteCommandParser
+Class DeleteCommandParser
+Class DeleteNoteCommandParser
+Class EditCommandParser
+Class EditNoteCommandParser
+Class FilterCommandParser
+Class FindCommandParser
+Class HistoryCommandParser
+Class ViewCommandParser
 Class CliSyntax
 Class ParserUtil
 Class ArgumentMultimap
@@ -21,18 +45,79 @@ Class Prefix
 Class HiddenOutside #FFFFFF
 HiddenOutside ..> AddressBookParser
 
-AddressBookParser .down.> XYZCommandParser: <<create>>
-
-XYZCommandParser ..> XYZCommand : <<create>>
+AddressBookParser ..> AddCommandParser: <<create>>
+AddressBookParser ..> AddNoteCommandParser: <<create>>
+AddressBookParser ..> DeleteCommandParser: <<create>>
+AddressBookParser ..> DeleteNoteCommandParser: <<create>>
+AddressBookParser ..> EditCommandParser: <<create>>
+AddressBookParser ..> EditNoteCommandParser: <<create>>
+AddressBookParser ..> FilterCommandParser: <<create>>
+AddressBookParser ..> FindCommandParser: <<create>>
+AddressBookParser ..> HistoryCommandParser: <<create>>
+AddressBookParser ..> ViewCommandParser: <<create>>
+AddressBookParser ..> ClearCommand: <<create>>
+AddressBookParser ..> ListCommand: <<create>>
+AddressBookParser ..> ExitCommand: <<create>>
+AddressBookParser ..> HelpCommand: <<create>>
+AddCommandParser ..> AddCommand: <<create>>
+AddNoteCommandParser ..> AddNoteCommand: <<create>>
+DeleteCommandParser ..> DeleteCommand: <<create>>
+DeleteNoteCommandParser ..> DeleteNoteCommand: <<create>>
+EditCommandParser ..> EditCommand: <<create>>
+EditNoteCommandParser ..> EditNoteCommand: <<create>>
+FilterCommandParser ..> FilterCommand: <<create>>
+FilterCommandParser ..> StudentMatchesFilterPredicate: <<create>>
+FindCommandParser ..> FindCommand: <<create>>
+FindCommandParser ..> NameContainsKeywordsPredicate: <<create>>
+HistoryCommandParser ..> HistoryCommand: <<create>>
+ViewCommandParser ..> ViewCommand: <<create>>
 AddressBookParser ..> Command : <<use>>
-XYZCommandParser .up.|> Parser
-XYZCommandParser ..> ArgumentMultimap
-XYZCommandParser ..> ArgumentTokenizer
+AddCommandParser .up.|> Parser
+AddNoteCommandParser .up.|> Parser
+DeleteCommandParser .up.|> Parser
+DeleteNoteCommandParser .up.|> Parser
+EditCommandParser .up.|> Parser
+EditNoteCommandParser .up.|> Parser
+FilterCommandParser .up.|> Parser
+FindCommandParser .up.|> Parser
+HistoryCommandParser .up.|> Parser
+ViewCommandParser .up.|> Parser
+AddCommandParser ..> ArgumentMultimap
+AddNoteCommandParser ..> ArgumentMultimap
+DeleteNoteCommandParser ..> ArgumentMultimap
+EditCommandParser ..> ArgumentMultimap
+EditNoteCommandParser ..> ArgumentMultimap
+FilterCommandParser ..> ArgumentMultimap
 ArgumentTokenizer .left.> ArgumentMultimap
-XYZCommandParser ..> CliSyntax
+AddCommandParser ..> CliSyntax
+AddNoteCommandParser ..> CliSyntax
+DeleteNoteCommandParser ..> CliSyntax
+EditCommandParser ..> CliSyntax
+EditNoteCommandParser ..> CliSyntax
+FilterCommandParser ..> CliSyntax
 CliSyntax ..> Prefix
-XYZCommandParser ..> ParserUtil
-ParserUtil .down.> Prefix
+AddCommandParser ..> ParserUtil
+EditCommandParser ..> ParserUtil
+FilterCommandParser ..> ParserUtil
+AddNoteCommandParser ..> ParserUtil
+DeleteCommandParser ..> ParserUtil
+DeleteNoteCommandParser ..> ParserUtil
+EditNoteCommandParser ..> ParserUtil
+HistoryCommandParser ..> ParserUtil
+ViewCommandParser ..> ParserUtil
 ArgumentTokenizer .down.> Prefix
-XYZCommand -up-|> Command
+AddCommand -up-|> Command
+AddNoteCommand -up-|> Command
+ClearCommand -up-|> Command
+DeleteCommand -up-|> Command
+DeleteNoteCommand -up-|> Command
+EditCommand -up-|> Command
+EditNoteCommand -up-|> Command
+ExitCommand -up-|> Command
+FilterCommand -up-|> Command
+FindCommand -up-|> Command
+HelpCommand -up-|> Command
+HistoryCommand -up-|> Command
+ListCommand -up-|> Command
+ViewCommand -up-|> Command
 @enduml

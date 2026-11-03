@@ -22,6 +22,8 @@ Class Email
 Class LessonNote
 Class LessonDate
 Class NoteText
+Class StudentMatchesFilterPredicate
+Class NameContainsKeywordsPredicate
 }
 
 Class HiddenOutside #FFFFFF
@@ -38,6 +40,8 @@ Model ..> Student
 ModelManager -left-> "1" AddressBook
 ModelManager -right-> "1" UserPrefs
 ModelManager --> "~* filtered" Student
+StudentMatchesFilterPredicate ..> Student
+NameContainsKeywordsPredicate ..> Student
 
 AddressBook *--> "1" UniqueStudentList
 ReadOnlyAddressBook --> "~* students" Student

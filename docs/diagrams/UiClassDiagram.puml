@@ -13,12 +13,14 @@ Class HelpWindow
 Class ResultDisplay
 Class PersonListPanel
 Class PersonCard
+Class LessonNoteFormatter
 Class StatusBarFooter
 Class CommandBox
 }
 
 package Model <<Rectangle>> {
-Class HiddenModel #FFFFFF
+Class Student
+Class LessonNote
 }
 
 package Logic <<Rectangle>> {
@@ -34,7 +36,7 @@ MainWindow *-down->  "1" CommandBox
 MainWindow *-down-> "1" ResultDisplay
 MainWindow *-down-> "1" PersonListPanel
 MainWindow *-down-> "1" StatusBarFooter
-MainWindow --> "0..1" HelpWindow
+MainWindow --> "1" HelpWindow
 
 PersonListPanel -down-> "*" PersonCard
 
@@ -47,14 +49,17 @@ PersonCard --|> UiPart
 StatusBarFooter --|> UiPart
 HelpWindow --|> UiPart
 
-PersonCard ..> Model
+PersonCard ..> Student
+PersonCard ..> LessonNoteFormatter
+LessonNoteFormatter ..> LessonNote
 UiManager -right-> Logic
+UiManager -right-> MainWindow
 MainWindow -left-> Logic
+PersonListPanel ..> Student : observes filtered students
 
 PersonListPanel -[hidden]left- HelpWindow
 HelpWindow -[hidden]left- CommandBox
 CommandBox -[hidden]left- ResultDisplay
 ResultDisplay -[hidden]left- StatusBarFooter
 
-MainWindow -[hidden]-|> UiPart
 @enduml

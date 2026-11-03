@@ -5,12 +5,17 @@ skinparam arrowColor LOGIC_COLOR_T4
 skinparam classBackgroundColor LOGIC_COLOR
 
 package Logic as LogicPackage {
-
-package "Parser Classes" as ParserClasses{
-}
-Class XYZCommand
+Class AddressBookParser
+Class "<<interface>>\nParser" as Parser
 Class CommandResult
 Class "{abstract}\nCommand" as Command
+Class AddCommand
+Class DeleteCommand
+Class EditCommand
+Class FilterCommand
+Class AddNoteCommand
+Class EditNoteCommand
+Class DeleteNoteCommand
 
 
 Class "<<interface>>\nLogic" as Logic
@@ -28,10 +33,17 @@ Class HiddenOutside #FFFFFF
 HiddenOutside ..> Logic
 
 LogicManager .right.|> Logic
-LogicManager -right->"1" ParserClasses
-ParserClasses ..> XYZCommand : <<create>>
+LogicManager -right-> "1" AddressBookParser
+AddressBookParser ..> Parser : delegates to
+Parser ..> Command : returns
 
-XYZCommand -up-|> Command
+AddCommand -up-|> Command
+DeleteCommand -up-|> Command
+EditCommand -up-|> Command
+FilterCommand -up-|> Command
+AddNoteCommand -up-|> Command
+EditNoteCommand -up-|> Command
+DeleteNoteCommand -up-|> Command
 LogicManager .left.> Command : <<call>>
 
 LogicManager --> Model
@@ -39,9 +51,6 @@ LogicManager --> Storage
 Storage --[hidden] Model
 Command .[hidden]up.> Storage
 Command .right.> Model
-note right of XYZCommand: XYZCommand = AddCommand, \nFindCommand, etc
-
-Logic ..> CommandResult
 LogicManager .down.> CommandResult
 Command .up.> CommandResult : <<create>>
 @enduml
