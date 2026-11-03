@@ -27,7 +27,7 @@ TutorBroPro is a **desktop application for freelance private tutors to manage st
    Keep the JAR in a folder where you have permission to create and modify files. TutorBroPro saves its data and preferences beside the JAR. Double-clicking the JAR might not work on some systems; use the terminal command below instead.
    </box>
 
-1. Open a terminal, `cd` to the folder containing the JAR file, and run `java -jar addressbook.jar`.<br>
+1. Open a terminal, `cd` to the folder containing the JAR file, and run `java -jar "[CS2103T-F11-4][TutorBroPro].jar"`.<br>
    A GUI similar to the one below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![TutorBroPro main window showing student cards and lesson history](images/Ui.png)
 
