@@ -37,6 +37,11 @@
 * @zxtay3 used ChatGPT EDU to prepare manual test commands for accented names, subject filtering,
   emoji previews, and command-result readability.
 
+* @sealfromdowntown used ChatGPT EDU to help implement and debug lesson-note
+  commands, including reporting the updated note index after a date change.
+* @sealfromdowntown used ChatGPT EDU to develop regression tests for note
+  reordering and identity-based index lookup, and to diagnose CI and Checkstyle failures.
+
 * @skhaw2004 used Claude Code to add test coverage for `LessonNote` and its relevant classes.
 * @skhaw2004 used Claude Code to review PRs and to check UserGuide and DeveloperGuide against the
   actual implementation.
